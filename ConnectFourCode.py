@@ -54,6 +54,7 @@ player1 = harley
 # player1 = josh
 player2 = josh
 
+
 # player1 = tim
 # player2 = tim
 
@@ -168,8 +169,7 @@ def paint_block(column, row, color):
     pygame.display.update()
 
 
-
-#start_screen = pygame.display.set_mode((width, height))
+# start_screen = pygame.display.set_mode((width, height))
 
 waiting_for_user_imput = False
 while True:
@@ -178,7 +178,7 @@ while True:
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.MOUSEBUTTONDOWN:
-                pass
+            pass
 
     import pygame
     import time
@@ -201,8 +201,8 @@ while True:
     pygame.display.set_caption('Connect Four Game')
     clock = pygame.time.Clock()
 
-   # josh_photo = pygame.image.load(josh_photo)
 
+    # josh_photo = pygame.image.load(josh_photo)
 
     def things_dodged(count):
         font = pygame.font.SysFont(None, 25)
@@ -342,7 +342,6 @@ while True:
     game_loop()
     pygame.quit()
     quit()
-
 
 draw_board()
 pygame.display.flip()
