@@ -9,15 +9,17 @@ SQUARE_SIZE = 80
 BLUE = (0, 0, 225)
 BLACK = (0, 0, 0)
 YELLOW = (225, 225, 0)
-WHITE = (255,255,255)
-ANAS_COLOR = (0, 62, 100)
+WHITE = (255, 255, 255)
+TEAL = (0, 62, 100)
+RED = (225, 0, 0)
+ANAS_COLOR = TEAL
 TIMS_COLOR = (10, 10, 10)
 JOSHS_COLOR = YELLOW
 HARLEYS_COLOR = (16, 6, 66)
 KAYDENCES_COLOR = (7, 23, 27)
 GABES_COLOR = (255, 255, 255)
-WJRS_COLOR = (225, 225, 225)
-RED = (225, 0, 0)
+WJRS_COLOR = (150, 150, 100)
+
 current_player = 1
 height = (ROW_COUNT + 1) * SQUARE_SIZE
 width = COLUMN_COUNT * SQUARE_SIZE
@@ -29,6 +31,10 @@ pygame.init()
 game_screen = pygame.display.set_mode((width, height))
 intro_screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
+
+title_format = pygame.font.Font('freesansbold.ttf', 36)
+regular_text_format = pygame.font.SysFont("comicsansms", 32)
+small_text_format = pygame.font.Font('freesansbold.ttf', 14)
 
 
 class Student:
@@ -45,7 +51,9 @@ tim = Student("Tim", test_image, TIMS_COLOR, 0)
 WJR = Student("WJR", test_image, WJRS_COLOR, 0)
 kaydence = Student("Kaydence", test_image, KAYDENCES_COLOR, 0)
 gabe = Student("Gabe", test_image, GABES_COLOR, 0)
-ana = Student("Ana", test_image, ANAS_COLOR, 0)
+ana = Student("Ana", test_image, TEAL, 0)
+
+students = [harley, josh, tim, WJR, kaydence, gabe, ana]
 
 player1 = harley
 player2 = josh
@@ -152,30 +160,38 @@ def message_display(screen, text):
     text_surf, text_rect = text_objects(text, large_text)
     text_rect.center = ((width / 2), (height / 2))
     screen.blit(text_surf, text_rect)
-
     pygame.display.update()
-
     pygame.time.sleep(2)
-
     game_loop()
 
+
+def place_message(screen, message, position, color=BLACK,
+                  font_selection=regular_text_format):
+    text = font_selection.render(message, True, color)
+    screen.blit(text, position)
 
 
 def game_intro():
     intro_is_running = True
-    game_screen.fill(ANAS_COLOR)
-    free_sans_bold = pygame.font.Font('freesansbold.ttf', 32)
-    comic_sans = pygame.font.SysFont("comicsansms", 36)
-    small_text = pygame.font.Font('freesansbold.ttf', 32)
-    text_surf, text_rect = text_objects("Please select Player 1:", comic_sans)
-    text_rect.center = ((width / 2), (height / 6))
-    game_screen.blit(text_surf, text_rect)
+    game_screen.fill(TEAL)
 
-
-    text = free_sans_bold.render("Connect Four by FTC 6025", True, YELLOW)
-    game_screen.blit(text,(0,0))
-
-
+    place_message(game_screen, "CONNECT", (5, 5), YELLOW)
+    place_message(game_screen, "FOUR!", (5, 50), YELLOW)
+    place_message(game_screen, "Who will be", (5, 150), WHITE)
+    place_message(game_screen, "Player 1 ?", (5, 190), WHITE)
+    name_y_position = 0
+    for student in students:
+        place_message(game_screen, student.name, (300, name_y_position + 20),
+                      WJRS_COLOR)
+        game_screen.blit(student.photo, (200, name_y_position))
+        circle_radius = int(SQUARE_SIZE * .45)
+        circle_position = (500,name_y_position + circle_radius + 5)
+        pygame.draw.circle(game_screen, student.favorite_color,
+                           circle_position, circle_radius,)
+        if student.favorite_color == TEAL:
+            pygame.draw.circle(game_screen, BLACK,
+                           circle_position, circle_radius, 2)
+        name_y_position += SQUARE_SIZE
     pygame.display.update()
 
     while intro_is_running:
@@ -200,8 +216,7 @@ def game_loop():
                 selected_column = numpy.math.floor(event.pos[0] / SQUARE_SIZE)
             if check_if_column_has_space(selected_column):
                 selected_row = get_next_open_row(selected_column)
-                current_player = drop_checker(selected_row,
-                                              selected_column, current_player)
+                drop_checker(selected_row, selected_column, current_player)
             if check_for_win():
                 print("Player " + str(current_player) + " wins!")
                 pygame.time.wait(3000)
