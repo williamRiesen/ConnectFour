@@ -58,7 +58,7 @@ kaydance = Student("Kaydance", kaydance_photo, KAYDANCES_COLOR, 0)
 gabe = Student("Gabe", gabe_photo, GABES_COLOR, 0)
 ana = Student("Ana", ana_photo, TEAL, 0)
 
-students = [harley, josh, tim,  kaydance, gabe, ana, WJR]
+students = [ana, gabe, harley, kaydance, josh, tim, WJR]
 
 player1 = harley
 player2 = josh
@@ -179,6 +179,7 @@ def place_message(screen, message, position, color=BLACK,
 def game_intro():
     intro_is_running = True
     game_screen.fill(TEAL)
+    highlighted_student = harley
 
     place_message(game_screen, "CONNECT", (15, 5), YELLOW)
     place_message(game_screen, "FOUR!", (15, 40), YELLOW)
@@ -190,21 +191,39 @@ def game_intro():
                       WJRS_COLOR)
         game_screen.blit(student.photo, (200, name_y_position))
         circle_radius = int(SQUARE_SIZE * .45)
-        circle_position = (500,name_y_position + circle_radius + 5)
+        circle_position = (500, name_y_position + circle_radius + 5)
         pygame.draw.circle(game_screen, student.favorite_color,
-                           circle_position, circle_radius,)
+                           circle_position, circle_radius, )
         if student.favorite_color == TEAL:
             pygame.draw.circle(game_screen, BLACK,
-                           circle_position, circle_radius, 2)
+                               circle_position, circle_radius, 2)
         name_y_position += SQUARE_SIZE
     pygame.display.update()
 
     while intro_is_running:
         for event in pygame.event.get():
-            print(event)
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
+            if event.type == pygame.MOUSEMOTION:
+                mouse_y_position = event.pos[1]
+                mouse_over_row = numpy.math.floor(mouse_y_position / 80)
+                if students[mouse_over_row] != highlighted_student:
+                    previously_highlighted_student = highlighted_student
+                    highlighted_student = students[mouse_over_row]
+                    place_message(game_screen, highlighted_student.name,
+                                  (300, mouse_over_row * SQUARE_SIZE + 20),
+                                  YELLOW)
+                    place_message(game_screen, previously_highlighted_student
+                   .name,
+                                  (300, students.index(
+                                      previously_highlighted_student) *
+                                   SQUARE_SIZE + 20),
+                                  WJRS_COLOR)
+                    pygame.display.update()
+
+
+                    print(highlighted_student.name)
 
         clock.tick(15)
 
