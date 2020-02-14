@@ -16,7 +16,7 @@ ANAS_COLOR = TEAL
 TIMS_COLOR = (10, 10, 10)
 JOSHS_COLOR = YELLOW
 HARLEYS_COLOR = (16, 6, 66)
-KAYDENCES_COLOR = (7, 23, 27)
+KAYDANCES_COLOR = (7, 23, 27)
 GABES_COLOR = (255, 255, 255)
 WJRS_COLOR = (150, 150, 100)
 
@@ -26,6 +26,11 @@ width = COLUMN_COUNT * SQUARE_SIZE
 test_image = pygame.image.load("TestImage.bmp")
 harley_photo = pygame.image.load("HarleyPhoto.bmp")
 josh_photo = pygame.image.load("JoshPhoto.bmp")
+tim_photo = pygame.image.load("TimPhoto.bmp")
+kaydance_photo = pygame.image.load("KaydancePhoto.bmp")
+ana_photo = pygame.image.load("AnaPhoto.bmp")
+gabe_photo = pygame.image.load("GabePhoto.bmp")
+wjr_photo = pygame.image.load("WJRPhoto.bmp")
 
 pygame.init()
 game_screen = pygame.display.set_mode((width, height))
@@ -47,13 +52,13 @@ class Student:
 
 harley = Student("Harley", harley_photo, HARLEYS_COLOR, 0)
 josh = Student("Josh", josh_photo, JOSHS_COLOR, 0)
-tim = Student("Tim", test_image, TIMS_COLOR, 0)
-WJR = Student("WJR", test_image, WJRS_COLOR, 0)
-kaydence = Student("Kaydence", test_image, KAYDENCES_COLOR, 0)
-gabe = Student("Gabe", test_image, GABES_COLOR, 0)
-ana = Student("Ana", test_image, TEAL, 0)
+tim = Student("Tim", tim_photo, TIMS_COLOR, 0)
+WJR = Student("WJR", wjr_photo, WJRS_COLOR, 0)
+kaydance = Student("Kaydance", kaydance_photo, KAYDANCES_COLOR, 0)
+gabe = Student("Gabe", gabe_photo, GABES_COLOR, 0)
+ana = Student("Ana", ana_photo, TEAL, 0)
 
-students = [harley, josh, tim, WJR, kaydence, gabe, ana]
+students = [harley, josh, tim,  kaydance, gabe, ana, WJR]
 
 player1 = harley
 player2 = josh
@@ -175,10 +180,10 @@ def game_intro():
     intro_is_running = True
     game_screen.fill(TEAL)
 
-    place_message(game_screen, "CONNECT", (5, 5), YELLOW)
-    place_message(game_screen, "FOUR!", (5, 50), YELLOW)
+    place_message(game_screen, "CONNECT", (15, 5), YELLOW)
+    place_message(game_screen, "FOUR!", (15, 40), YELLOW)
     place_message(game_screen, "Who will be", (5, 150), WHITE)
-    place_message(game_screen, "Player 1 ?", (5, 190), WHITE)
+    place_message(game_screen, "Player 1 ?", (20, 190), WHITE)
     name_y_position = 0
     for student in students:
         place_message(game_screen, student.name, (300, name_y_position + 20),
