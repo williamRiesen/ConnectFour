@@ -26,6 +26,5 @@ WJR = Student("WJR", wjr_photo, TAN, 0)
 kaydence = Student("Kaydence", kaydence_photo, KAYDENCES_COLOR, 0)
 gabe = Student("Gabe", gabe_photo, GABES_COLOR, 0)
 ana = Student("Ana", ana_photo, TEAL, 0)
-no_student = Student("No Student Selected", test_image, WHITE,0)
 
 students = [ana, gabe, harley, kaydence, josh, tim, WJR]

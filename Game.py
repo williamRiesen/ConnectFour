@@ -5,9 +5,10 @@ from Colors import *
 from DrawingTools import SQUARE_SIZE, draw_board, place_message, place_circle
 from GameLogic import check_if_column_has_space, get_next_open_row, \
     check_for_win, drop_checker, create_board
+from Students import Student
 
 
-def game_loop(rows, columns, player1, player2):
+def game_loop(rows: int, columns: int, player1: Student, player2: Student):
     game_in_progress = True
     selected_column = 0
     current_player = 1
@@ -76,9 +77,7 @@ def game_loop(rows, columns, player1, player2):
     while awaiting_any_key:
         events = pygame.event.get()
         for event in events:
+            if event.type == pygame.QUIT:
+                sys.exit()
             if event.type == pygame.KEYDOWN:
                 awaiting_any_key = False
-
-
-#    pygame.display.update()
- #   clock.tick(60)

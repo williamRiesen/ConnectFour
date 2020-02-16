@@ -15,6 +15,10 @@ def get_next_open_row(board, column, ROW_COUNT):
             return row
 
 
+def drop_checker(board, row, column, player):
+    board[row][column] = player
+
+
 def check_for_win(board, COLUMN_COUNT, ROW_COUNT, current_player):
     for column in range(COLUMN_COUNT - 3):
         for row in range(ROW_COUNT):
@@ -44,7 +48,3 @@ def check_for_win(board, COLUMN_COUNT, ROW_COUNT, current_player):
                     board[row - 2][column + 2] == current_player and \
                     board[row - 3][column + 3] == current_player:
                 return True
-
-
-def drop_checker(board, row, column, player):
-    board[row][column] = player

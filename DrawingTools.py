@@ -1,6 +1,5 @@
 import pygame
 from pygame import font
-
 from Colors import *
 
 SQUARE_SIZE = 80
@@ -19,14 +18,6 @@ def draw_board(screen, board, rows, columns, player1, player2):
                 paint_block(screen, rows, column, row, player2.favorite_color)
             else:
                 paint_block(screen, rows, column, row, BLACK)
-    # if current_player == 1:
-    #     game_screen.blit(player1.photo, (0, 0))
-    #     rectangle = (width - SQUARE_SIZE, 0, SQUARE_SIZE, SQUARE_SIZE)
-    #     pygame.draw.rect(game_screen, BLACK, rectangle)
-    # else:
-    #     game_screen.blit(player2.photo, (width - SQUARE_SIZE, 0))
-    #     rectangle = (0, 0, SQUARE_SIZE, SQUARE_SIZE)
-    #     pygame.draw.rect(game_screen, BLACK, rectangle)
 
 
 def place_message(screen, message, position, color=BLACK,
