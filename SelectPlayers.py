@@ -1,7 +1,6 @@
-import numpy
 from DrawingTools import place_message, place_circle, SQUARE_SIZE
 from Students import *
-
+import math
 
 def select_players():
     width = 560
@@ -63,7 +62,7 @@ def get_user_selection(screen, already_selected=None):
                 quit()
             elif event.type == pygame.MOUSEMOTION:
                 mouse_y_position = event.pos[1]
-                row = numpy.math.floor(mouse_y_position / 80)
+                row = math.floor(mouse_y_position / 80)
                 if students[row] != highlighted_student and students[row] != already_selected:
                     previously_highlighted_student = highlighted_student
                     highlighted_student = students[row]

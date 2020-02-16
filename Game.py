@@ -1,11 +1,11 @@
 import sys
-import numpy
 import pygame
 from Colors import *
 from DrawingTools import SQUARE_SIZE, draw_board, place_message, place_circle
 from GameLogic import check_if_column_has_space, get_next_open_row, \
     check_for_win, drop_checker, create_board
 from Students import Student
+import math
 
 
 def game_loop(rows: int, columns: int, player1: Student, player2: Student):
@@ -39,7 +39,7 @@ def game_loop(rows: int, columns: int, player1: Student, player2: Student):
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
 
-                selected_column = numpy.math.floor(event.pos[0] / SQUARE_SIZE)
+                selected_column = math.floor(event.pos[0] / SQUARE_SIZE)
                 if check_if_column_has_space(board, selected_column, rows):
                     selected_row = get_next_open_row(board, selected_column,
                                                      rows)

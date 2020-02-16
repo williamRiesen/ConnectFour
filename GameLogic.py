@@ -1,8 +1,10 @@
-import numpy
-
 
 def create_board(rows, columns):
-    return numpy.zeros((rows, columns))
+    board = [None] * rows
+    for i in range(rows):
+        board[i] = [0] * columns
+
+    return board
 
 
 def check_if_column_has_space(board, column, ROW_COUNT):
