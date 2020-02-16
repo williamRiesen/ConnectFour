@@ -1,3 +1,10 @@
+import numpy
+
+
+def create_board(rows, columns):
+    return numpy.zeros((rows, columns))
+
+
 def check_if_column_has_space(board, column, ROW_COUNT):
     return board[ROW_COUNT - 1][column] == 0
 
@@ -37,3 +44,7 @@ def check_for_win(board, COLUMN_COUNT, ROW_COUNT, current_player):
                     board[row - 2][column + 2] == current_player and \
                     board[row - 3][column + 3] == current_player:
                 return True
+
+
+def drop_checker(board, row, column, player):
+    board[row][column] = player
