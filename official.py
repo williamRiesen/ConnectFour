@@ -5,6 +5,15 @@ from drawing_tools import regular_text_format, place_circle, place_message
 from settings import COLUMN_COUNT, SQUARE_SIZE, ROW_COUNT
 
 
+def switch_players(current_player):
+    if current_player == 1:
+        return 2
+    elif current_player == 2:
+        return 1
+    else:
+        print("Error: current_player must be 1 or 2.")
+
+
 class Official:
     def __init__(self):
         height = (ROW_COUNT + 1) * SQUARE_SIZE
@@ -59,7 +68,8 @@ class Official:
                 elif event.type == pygame.MOUSEMOTION:
                     mouse_y_position = event.pos[1]
                     row = math.floor(mouse_y_position / 80)
-                    if students[row] != highlighted_student and students[row] != already_selected:
+                    if students[row] != highlighted_student and students[
+                        row] != already_selected:
                         previously_highlighted_student = highlighted_student
                         highlighted_student = students[row]
                         place_message(self.screen,
@@ -106,3 +116,48 @@ class Official:
             pygame.display.update()
             pygame.time.wait(100)
 
+    def display_player_up(self, player1, player2, current_player):
+        pygame.draw.rect(self.screen, Color.BLACK.value, (200, 0, 300, 75))
+        if current_player == 1:
+            pygame.draw.rect(self.screen, Color.BLACK.value,
+                             (480, 0, SQUARE_SIZE,
+                              SQUARE_SIZE))
+            place_message(self.screen, player1.name + " is up", (200, 15),
+                          Color.WHITE.value)
+            self.screen.blit(player1.photo, (0, 0))
+            place_circle(self.screen, (520, 0), player1.favorite_color.value)
+        else:
+            place_message(self.screen, player2.name + " is up", (200, 15),
+                          Color.WHITE.value)
+            pygame.draw.rect(self.screen, Color.BLACK.value, (0, 0, SQUARE_SIZE,
+                                                              SQUARE_SIZE))
+            self.screen.blit(player2.photo, (480, 0))
+            place_circle(self.screen, (int(SQUARE_SIZE / 2), 0),
+                         player2.favorite_color.value)
+        pygame.display.update()
+
+    def declare_winner(self, player1, player2, current_player):
+        if current_player == 1:
+            winner = player1
+        else:
+            winner = player2
+        self.flash_winner_message(winner)
+
+        pygame.time.wait(1000)
+        pygame.draw.rect(self.screen, Color.BLACK.value,
+                         (100, 0, 350,
+                          75))
+        place_message(self.screen, "For new match: any key", (100, 15),
+                      Color.WHITE.value)
+        pygame.display.update()
+        return winner
+
+    def flash_winner_message(self, winner):
+        for i in range(10):
+            pygame.draw.rect(self.screen, Color.BLACK.value, (100, 0, 350, 75))
+            pygame.display.update()
+            pygame.time.wait(100)
+            place_message(self.screen, winner.name + " Wins!", (100, 15),
+                          Color.WHITE.value)
+            pygame.display.update()
+            pygame.time.wait(100)
