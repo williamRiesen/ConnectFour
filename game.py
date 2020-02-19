@@ -6,7 +6,8 @@ from game_logic import check_if_column_has_space, get_next_open_row, \
     check_for_win, drop_checker, create_board
 from official import Official, switch_players
 from settings import ROW_COUNT, COLUMN_COUNT
-from students import Student
+from sound_tools import play_checker_drop_sound
+from students import Student, rubber_chicken
 import math
 
 
@@ -40,6 +41,7 @@ def play_game(player1: Student, player2: Student):
 
                 selected_column = math.floor(event.pos[0] / SQUARE_SIZE)
                 if check_if_column_has_space(board, selected_column):
+                    play_checker_drop_sound(player1, player2, current_player)
                     selected_row = get_next_open_row(board, selected_column,
                                                      ROW_COUNT)
                     drop_checker(board, selected_row, selected_column,
@@ -65,3 +67,5 @@ def play_game(player1: Student, player2: Student):
             if event.type == pygame.KEYDOWN:
                 awaiting_any_key = False
     return winner
+
+

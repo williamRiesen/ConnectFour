@@ -3,6 +3,7 @@ import pygame
 from colors import Color
 from drawing_tools import regular_text_format, place_circle, place_message
 from settings import COLUMN_COUNT, SQUARE_SIZE, ROW_COUNT
+from students import bell, cow
 
 
 def switch_players(current_player):
@@ -107,7 +108,8 @@ class Official:
         pygame.time.wait(500)
 
     def declare_game_on(self):
-        for i in range(7):
+        cow.play()
+        for i in range(14):
             pygame.draw.rect(self.screen, Color.RED.value, (5, 280, 180, 40))
             place_message(self.screen, "GAME ON!", (10, 275), Color.WHITE.value)
             pygame.display.update()
@@ -137,6 +139,7 @@ class Official:
         pygame.display.update()
 
     def declare_winner(self, player1, player2, current_player):
+        bell.play()
         if current_player == 1:
             winner = player1
         else:
