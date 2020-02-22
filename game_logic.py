@@ -1,10 +1,10 @@
-from settings import ROW_COUNT
+from settings import ROW_COUNT, COLUMN_COUNT
 
 
-def create_board(rows, columns):
-    board = [None] * rows
-    for i in range(rows):
-        board[i] = [0] * columns
+def create_board():
+    board = [None] * ROW_COUNT
+    for i in range(ROW_COUNT):
+        board[i] = [0] * COLUMN_COUNT
     return board
 
 
@@ -22,7 +22,7 @@ def drop_checker(board, row, column, player):
     board[row][column] = player
 
 
-def check_for_win(board, COLUMN_COUNT, ROW_COUNT, current_player):
+def check_for_win(board, current_player):
     for column in range(COLUMN_COUNT - 3):
         for row in range(ROW_COUNT):
             if board[row][column] == current_player and \

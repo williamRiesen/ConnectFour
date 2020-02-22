@@ -1,4 +1,5 @@
 def play_checker_drop_sound(player1, player2, current_player):
+
     if current_player == 1:
         player1.sound.play()
     elif current_player == 2:

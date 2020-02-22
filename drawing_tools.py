@@ -9,15 +9,7 @@ regular_text_format = pygame.font.SysFont("comicsansms", 32)
 small_text_format = pygame.font.Font('freesansbold.ttf', 14)
 
 
-def draw_board(screen, board,  player1, player2):
-    for row in range(ROW_COUNT):
-        for column in range(COLUMN_COUNT):
-            if board[row][column] == 1:
-                paint_block(screen, ROW_COUNT, column, row, player1.favorite_color)
-            elif board[row][column] == 2:
-                paint_block(screen, ROW_COUNT, column, row, player2.favorite_color)
-            else:
-                paint_block(screen, ROW_COUNT, column, row, Color.BLACK)
+
 
 
 def place_message(screen, message, position, color=Color.BLACK,
