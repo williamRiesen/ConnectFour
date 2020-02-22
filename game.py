@@ -6,7 +6,8 @@ import pygame
 from banner import draw_banner
 from checker import draw_checker
 from colors import Color
-from drawing_tools import place_message, place_circle, draw_board
+from drawing_tools import place_message, place_circle, draw_board, \
+    create_empty_block
 from game_logic import create_board, check_if_column_has_space, \
     get_next_open_row, drop_checker, check_for_win
 from settings import ROW_COUNT, SQUARE_SIZE, COLUMN_COUNT
@@ -108,7 +109,6 @@ def play():
     banner = display_player_up()
     corner_to_center_offset = (int(SQUARE_SIZE / 2), int(SQUARE_SIZE / 2))
     while game_in_progress:
-
         events = pygame.event.get()
         for event in events:
             if event.type == pygame.QUIT:
@@ -156,10 +156,16 @@ def make_move(selected_column):
     selected_row = get_next_open_row(board, selected_column,
                                      ROW_COUNT)
     drop_checker(board, selected_row, selected_column, current_player)
+    empty = create_empty_block()
+    prior_checker_position = (2 * SQUARE_SIZE, 2 * SQUARE_SIZE)
 
-    checker_position = selected_column * SQUARE_SIZE, \
-                       ((ROW_COUNT - selected_row) *
-                        SQUARE_SIZE)
-    checker = draw_checker(current_player)
-    screen.blit(checker, checker_position, )
-    pygame.display.update()
+    for checker_height in range(0, (ROW_COUNT - selected_row + 1) * SQUARE_SIZE,
+                                80):
+        checker = draw_checker(current_player)
+        checker_position = (selected_column * SQUARE_SIZE, checker_height)
+        screen.blit(empty, prior_checker_position)
+        screen.blit(checker, checker_position)
+        pygame.display.update()
+        prior_checker_position = checker_position
+        pygame.time.wait(50)
+        print(checker_height)

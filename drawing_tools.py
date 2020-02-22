@@ -1,5 +1,5 @@
 import pygame
-from pygame import font
+from pygame import font, Surface
 from colors import Color
 from settings import ROW_COUNT, COLUMN_COUNT, SQUARE_SIZE
 
@@ -15,7 +15,8 @@ def draw_board(screen):
 
 
 def draw_checker(screen, row, column, player):
-    place_circle(screen, (column * SQUARE_SIZE, (ROW_COUNT-row)* SQUARE_SIZE),
+    place_circle(screen,
+                 (column * SQUARE_SIZE, (ROW_COUNT - row) * SQUARE_SIZE),
                  player.favorite_color.value)
 
 
@@ -27,7 +28,8 @@ def place_message(screen, message, position, color=Color.BLACK,
 
 def place_circle(screen, position, color):
     circle_radius = int(SQUARE_SIZE * .45)
-    circle_position = (position[0] + circle_radius + 5, position[1] + circle_radius + 5)
+    circle_position = (
+    position[0] + circle_radius + 5, position[1] + circle_radius + 5)
     pygame.draw.circle(screen, color,
                        circle_position, circle_radius)
     if color == Color.TEAL:
@@ -55,3 +57,12 @@ def paint_block(screen, rows, column, row, color):
     pygame.draw.rect(screen, Color.BLUE.value, rectangle)
     pygame.draw.circle(screen, color.value, circle_position, circle_radius)
     pygame.display.update()
+
+
+def create_empty_block():
+    block = Surface((SQUARE_SIZE, SQUARE_SIZE))
+    block.fill(Color.BLUE.value)
+    radius = int(SQUARE_SIZE * 0.45)
+    half_square = int(SQUARE_SIZE / 2)
+    pygame.draw.circle(block, Color.BLACK.value, (half_square, half_square), radius)
+    return block
