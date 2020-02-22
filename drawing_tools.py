@@ -4,25 +4,32 @@ from colors import Color
 from settings import ROW_COUNT, COLUMN_COUNT, SQUARE_SIZE
 
 pygame.init()
-title_format = pygame.font.Font('freesansbold.ttf', 36)
-regular_text_format = pygame.font.SysFont("comicsansms", 32)
-small_text_format = pygame.font.Font('freesansbold.ttf', 14)
+text_format = pygame.font.SysFont("comicsansms", 32)
 
 
+def draw_board(screen):
+    for row in range(ROW_COUNT):
+        for column in range(COLUMN_COUNT):
+            paint_block(screen, ROW_COUNT, column, row,
+                        Color.BLACK)
 
+
+def draw_checker(screen, row, column, player):
+    place_circle(screen, (column * SQUARE_SIZE, (ROW_COUNT-row)* SQUARE_SIZE),
+                 player.favorite_color.value)
 
 
 def place_message(screen, message, position, color=Color.BLACK,
-                  font_selection=regular_text_format):
+                  font_selection=text_format):
     text = font_selection.render(message, True, color)
     screen.blit(text, position)
 
 
 def place_circle(screen, position, color):
     circle_radius = int(SQUARE_SIZE * .45)
-    circle_position = (position[0], position[1] + circle_radius + 5)
+    circle_position = (position[0] + circle_radius + 5, position[1] + circle_radius + 5)
     pygame.draw.circle(screen, color,
-                       circle_position, circle_radius, )
+                       circle_position, circle_radius)
     if color == Color.TEAL:
         pygame.draw.circle(screen, Color.BLACK,
                            circle_position, circle_radius, 2)

@@ -1,9 +1,9 @@
 import math
 import pygame
 from colors import Color
-from drawing_tools import regular_text_format, place_circle
+from drawing_tools import text_format
 from settings import COLUMN_COUNT, SQUARE_SIZE, ROW_COUNT
-from students import bell, cow
+from students import bell
 
 height = (ROW_COUNT + 1) * SQUARE_SIZE
 width = COLUMN_COUNT * SQUARE_SIZE
@@ -22,7 +22,7 @@ def choose_players(students):
 
 
 def place_message(message, position=(0, 0), color=Color.BLACK,
-                  font_selection=regular_text_format):
+                  font_selection=text_format):
     text = font_selection.render(message, True, color.value)
 
     screen.blit(text, position)
@@ -74,8 +74,7 @@ def get_user_selection(students, already_selected=None):
             elif event.type == pygame.MOUSEMOTION:
                 mouse_y_position = event.pos[1]
                 row = math.floor(mouse_y_position / 80)
-                if students[row] != highlighted_student and students[
-                    row] != already_selected:
+                if students[row] != highlighted_student and students[row] != already_selected:
                     previously_highlighted_student = highlighted_student
                     highlighted_student = students[row]
                     place_message(highlighted_student.name,
@@ -88,6 +87,7 @@ def get_user_selection(students, already_selected=None):
                     pygame.display.update()
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 player = highlighted_student
+                highlighted_student.sound.play()
                 waiting_for_user = False
     return player
 
@@ -114,7 +114,7 @@ def display_player2(player2):
 
 
 def declare_game_on():
-    cow.play()
+    bell.play()
     for i in range(14):
         pygame.draw.rect(screen, Color.RED.value, (5, 280, 180, 40))
         place_message("GAME ON!", (10, 275), Color.WHITE)

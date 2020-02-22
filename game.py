@@ -1,123 +1,140 @@
 import math
 import sys
+
 import pygame
+
+from banner import draw_banner
+from checker import draw_checker
 from colors import Color
-from drawing_tools import paint_block, place_message, place_circle
+from drawing_tools import place_message, place_circle, draw_board
 from game_logic import create_board, check_if_column_has_space, \
     get_next_open_row, drop_checker, check_for_win
 from settings import ROW_COUNT, SQUARE_SIZE, COLUMN_COUNT
-from sound_tools import play_checker_drop_sound
-from students import bell
+from students import bell, bubble_pop_high, bubble_pop_low
+
+height = (ROW_COUNT + 1) * SQUARE_SIZE
+width = COLUMN_COUNT * SQUARE_SIZE
+screen = pygame.display.set_mode((width, height))
+board = create_board()
+player1 = None
+player2 = None
+current_player = None
+photo_on_left = True
 
 
-class Game:
-    def __init__(self, player1, player2):
-        self.player1 = player1
-        self.player2 = player2
-        height = (ROW_COUNT + 1) * SQUARE_SIZE
-        width = COLUMN_COUNT * SQUARE_SIZE
-        self.screen = pygame.display.set_mode((width, height))
-        self.board = create_board()
-        self.game_in_progress = True
-        self.current_player = 1
+def display_player_up():
+    global player1, player2
+    global photo_on_left
+    right_upper_corner = ((COLUMN_COUNT - 1) * SQUARE_SIZE, 0)
+    left_upper_corner = (0, 0)
+    right_upper_with_offset = (int((COLUMN_COUNT - 0.5) * SQUARE_SIZE),
+                               int(SQUARE_SIZE * 0.5))
+    left_upper_with_offset = (int(SQUARE_SIZE * 0.5), int(SQUARE_SIZE * 0.5))
+    if current_player == player1:
+        photo_on_left = True
+        checker_position = right_upper_corner
+        pygame.mouse.set_pos(right_upper_with_offset)
+    else:
+        photo_on_left = False
+        checker_position = left_upper_corner
+        pygame.mouse.set_pos(left_upper_with_offset)
 
-    def draw_board(self):
-        for row in range(ROW_COUNT):
-            for column in range(COLUMN_COUNT):
-                if self.board[row][column] == 1:
-                    paint_block(self.screen, ROW_COUNT, column, row,
-                                self.player1.favorite_color)
-                elif self.board[row][column] == 2:
-                    paint_block(self.screen, ROW_COUNT, column, row,
-                                self.player2.favorite_color)
-                else:
-                    paint_block(self.screen, ROW_COUNT, column, row,
-                                Color.BLACK)
+    banner = draw_banner(current_player, photo_on_left)
+    screen.blit(banner, (0, 0,))
 
-    def display_player_up(self):
-        pygame.draw.rect(self.screen, Color.BLACK.value, (200, 0, 300, 75))
-        if self.current_player == 1:
-            pygame.draw.rect(self.screen, Color.BLACK.value,
-                             (480, 0, SQUARE_SIZE,
-                              SQUARE_SIZE))
-            place_message(self.screen, self.player1.name + " is up", (200, 15),
-                          Color.WHITE.value)
-            self.screen.blit(self.player1.photo, (0, 0))
-            place_circle(self.screen, (520, 0),
-                         self.player1.favorite_color.value)
-        else:
-            place_message(self.screen, self.player2.name + " is up", (200, 15),
-                          Color.WHITE.value)
-            pygame.draw.rect(self.screen, Color.BLACK.value, (0, 0, SQUARE_SIZE,
-                                                              SQUARE_SIZE))
-            self.screen.blit(self.player2.photo, (480, 0))
-            place_circle(self.screen, (int(SQUARE_SIZE / 2), 0),
-                         self.player2.favorite_color.value)
+    pygame.display.update()
+    return banner
+
+
+def declare_winner():
+    global player1, player2
+    bell.play()
+    if current_player == player1:
+        winner = player1
+    else:
+        winner = player2
+    winner.sound.play()
+    flash_winner_message(winner)
+
+    pygame.time.wait(1000)
+    pygame.draw.rect(screen, Color.BLACK.value,
+                     (100, 0, 350,
+                      75))
+    place_message(screen, "For new match: any key", (100, 15),
+                  Color.WHITE.value)
+    pygame.display.update()
+    return winner
+
+
+def flash_winner_message(winner):
+    for i in range(10):
+        pygame.draw.rect(screen, Color.BLACK.value, (100, 0, 350, 75))
         pygame.display.update()
-
-    def declare_winner(self):
-        bell.play()
-        if self.current_player == 1:
-            winner = self.player1
-        else:
-            winner = self.player2
-        self.flash_winner_message(winner)
-
-        pygame.time.wait(1000)
-        pygame.draw.rect(self.screen, Color.BLACK.value,
-                         (100, 0, 350,
-                          75))
-        place_message(self.screen, "For new match: any key", (100, 15),
+        pygame.time.wait(100)
+        place_message(screen, winner.name + " Wins!", (100, 15),
                       Color.WHITE.value)
         pygame.display.update()
-        return winner
+        pygame.time.wait(100)
 
-    def flash_winner_message(self, winner):
-        for i in range(10):
-            pygame.draw.rect(self.screen, Color.BLACK.value, (100, 0, 350, 75))
-            pygame.display.update()
-            pygame.time.wait(100)
-            place_message(self.screen, winner.name + " Wins!", (100, 15),
-                          Color.WHITE.value)
-            pygame.display.update()
-            pygame.time.wait(100)
 
-    def switch_players(self):
-        if self.current_player == 1:
-            self.current_player = 2
-        elif self.current_player == 2:
-            self.current_player = 1
-        else:
-            print("Error: current_player must be 1 or 2.")
+def switch_players():
+    global current_player
+    global player1
+    global player2
+    if current_player == player1:
+        current_player = player2
+    elif current_player == player2:
+        current_player = player1
+    else:
+        print("Error ID-ten-T: current_player must be 1 or 2.")
 
-    def play(self):
-        while self.game_in_progress:
-            self.draw_board()
-            self.display_player_up()
-            events = pygame.event.get()
-            for event in events:
-                if event.type == pygame.QUIT:
-                    sys.exit()
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    selected_column = math.floor(event.pos[0] / SQUARE_SIZE)
-                    if check_if_column_has_space(self.board, selected_column):
-                        play_checker_drop_sound(self.player1, self.player2,
-                                                self.current_player)
-                        selected_row = get_next_open_row(self.board,
-                                                         selected_column,
-                                                         ROW_COUNT)
-                        drop_checker(self.board, selected_row, selected_column,
-                                     self.current_player)
-                        self.draw_board()
-                        pygame.display.update()
-                        self.switch_players()
-                        if check_for_win(self.board, self.current_player):
-                            winner = self.declare_winner()
-                            self.game_in_progress = False
+
+def set_players(new_player1, new_player2):
+    global player1
+    global player2
+    player1 = new_player1
+    player2 = new_player2
+
+
+def play():
+    global player1
+    global player2
+    global current_player
+    global board
+    board = create_board()
+    current_player = player1
+    game_in_progress = True
+    draw_board(screen)
+    banner = display_player_up()
+    corner_to_center_offset = (int(SQUARE_SIZE / 2), int(SQUARE_SIZE / 2))
+    while game_in_progress:
+
+        events = pygame.event.get()
+        for event in events:
+            if event.type == pygame.QUIT:
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                selected_column = math.floor(event.pos[0] / SQUARE_SIZE)
+                if check_if_column_has_space(board, selected_column):
+
+                    make_move(selected_column)
+                    if check_for_win(board, current_player):
+                        winner = declare_winner()
+                        game_in_progress = False
                     else:
-                        print("This column is full.")
-        wait_for_any_key()
-        return winner
+                        switch_players()
+                        banner = display_player_up()
+                else:
+                    print("This column is full.")
+            elif event.type == pygame.MOUSEMOTION:
+                screen.blit(banner, (0, 0))
+                checker_position = (event.pos[0] - int(SQUARE_SIZE / 2),
+                                    0)
+                checker = draw_checker(current_player)
+                screen.blit(checker, checker_position)
+                pygame.display.update()
+    wait_for_any_key()
+    return winner
 
 
 def wait_for_any_key():
@@ -129,3 +146,20 @@ def wait_for_any_key():
                 sys.exit()
             if event.type == pygame.KEYDOWN:
                 awaiting_any_key = False
+
+
+def make_move(selected_column):
+    if current_player == player1:
+        bubble_pop_high.play()
+    else:
+        bubble_pop_low.play()
+    selected_row = get_next_open_row(board, selected_column,
+                                     ROW_COUNT)
+    drop_checker(board, selected_row, selected_column, current_player)
+
+    checker_position = selected_column * SQUARE_SIZE, \
+                       ((ROW_COUNT - selected_row) *
+                        SQUARE_SIZE)
+    checker = draw_checker(current_player)
+    screen.blit(checker, checker_position, )
+    pygame.display.update()
