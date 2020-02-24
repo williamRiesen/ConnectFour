@@ -3,7 +3,7 @@ import pygame
 from colors import Color
 from drawing_tools import text_format
 from settings import COLUMN_COUNT, SQUARE_SIZE, ROW_COUNT
-from students import bell
+from sounds import bell
 
 height = (ROW_COUNT + 1) * SQUARE_SIZE
 width = COLUMN_COUNT * SQUARE_SIZE

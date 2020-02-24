@@ -28,13 +28,9 @@ def place_message(screen, message, position, color=Color.BLACK,
 
 def place_circle(screen, position, color):
     circle_radius = int(SQUARE_SIZE * .45)
-    circle_position = (
-    position[0] + circle_radius + 5, position[1] + circle_radius + 5)
+    circle_position = (position[0] + circle_radius + 5, position[1] + circle_radius + 5)
     pygame.draw.circle(screen, color,
                        circle_position, circle_radius)
-    if color == Color.TEAL:
-        pygame.draw.circle(screen, Color.BLACK,
-                           circle_position, circle_radius, 2)
 
 
 def paint_block(screen, rows, column, row, color):
@@ -64,5 +60,6 @@ def create_empty_block():
     block.fill(Color.BLUE.value)
     radius = int(SQUARE_SIZE * 0.45)
     half_square = int(SQUARE_SIZE / 2)
-    pygame.draw.circle(block, Color.BLACK.value, (half_square, half_square), radius)
+    pygame.draw.circle(block, Color.BLACK.value, (half_square, half_square),
+                       radius)
     return block
