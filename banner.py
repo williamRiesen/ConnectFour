@@ -1,7 +1,7 @@
 import pygame
 
 from colors import Color
-from drawing_tools import place_message
+from drawing_tools import create_banner_message
 from settings import SQUARE_SIZE, COLUMN_COUNT
 
 height = SQUARE_SIZE
@@ -20,5 +20,4 @@ def update_banner_with_photo(player, photo_on_left):
     else:
         photo_position = ((COLUMN_COUNT - 1) * SQUARE_SIZE, 0)
     banner_with_photo_only.blit(photo, photo_position)
-
     return banner_with_photo_only

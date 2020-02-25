@@ -13,3 +13,8 @@ class Color(Enum):
     KAYDENCES_COLOR = (7, 23, 27)
     GABES_COLOR = (255, 255, 255)
     TAN = (150, 150, 100)
+
+    def opposite(self):
+        return (255 - self.value[0],
+                255 - self.value[1],
+                255 - self.value[2])
