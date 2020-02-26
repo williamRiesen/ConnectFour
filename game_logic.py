@@ -18,7 +18,7 @@ def get_next_open_row(board, column, ROW_COUNT):
             return row
 
 
-def drop_checker(board, row, column, player):
+def record_move(board, row, column, player):
     board[row][column] = player
 
 

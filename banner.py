@@ -1,7 +1,5 @@
 import pygame
 
-from colors import Color
-from drawing_tools import create_banner_message
 from settings import SQUARE_SIZE, COLUMN_COUNT
 
 height = SQUARE_SIZE

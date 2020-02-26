@@ -1,4 +1,5 @@
 from enum import Enum
+import os
 import pygame
 from pygame import font, Surface
 from colors import Color
@@ -6,6 +7,13 @@ from settings import ROW_COUNT, COLUMN_COUNT, SQUARE_SIZE
 
 pygame.init()
 text_format = pygame.font.SysFont("comicsansms", 32)
+
+
+def initialize_window():
+    window_x_position = 100
+    window_y_position = 100
+    os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (
+        window_x_position, window_y_position)
 
 
 class PhotoPosition(Enum):
@@ -22,35 +30,7 @@ def create_banner(player, photo_position, message):
     return banner
 
 
-def create_player_banner(player, photo_position):
-    banner = Surface((COLUMN_COUNT * SQUARE_SIZE, SQUARE_SIZE))
-    banner.blit(player.photo, photo_position.value)
-    message = player.name + " is up."
-    text = text_format.render(message, True, Color.WHITE.value)
-    margin = int((banner.get_rect().width - text.get_rect().width) / 2)
-    banner.blit(text, (margin, 15))
-    return banner
-
-
-def create_winner_banner(player, photo_position):
-    banner = Surface((COLUMN_COUNT * SQUARE_SIZE, SQUARE_SIZE))
-    banner.blit(player.photo, photo_position.value)
-    message = player.name + " Wins!"
-    text = text_format.render(message, True, Color.WHITE.value)
-    banner.blit(text, (150, 15))
-    return banner
-
-
-def create_any_key_banner(player, photo_position):
-    banner = Surface((COLUMN_COUNT * SQUARE_SIZE, SQUARE_SIZE))
-    banner.blit(player.photo, photo_position.value)
-    message = "For new match: any key"
-    text = text_format.render(message, True, Color.WHITE.value)
-    banner.blit(text, (100, 15))
-    return banner
-
-
-def create_empty_grid(screen):
+def create_empty_grid():
     empty_grid = Surface(
         (COLUMN_COUNT * SQUARE_SIZE, (ROW_COUNT + 1) * SQUARE_SIZE))
     for row in range(ROW_COUNT):
@@ -58,15 +38,6 @@ def create_empty_grid(screen):
             paint_block(empty_grid, ROW_COUNT, column, row,
                         Color.BLACK)
     return empty_grid
-
-
-def create_banner_message(screen, message, position, color=Color.BLACK,
-                          font_selection=text_format):
-    banner_message = Surface((COLUMN_COUNT * SQUARE_SIZE, SQUARE_SIZE))
-    banner_message.set_colorkey(Color.BLACK.value)
-    text = font_selection.render(message, True, color)
-    banner_message.blit(text, position)
-    return banner_message
 
 
 def place_circle(screen, position, color):
