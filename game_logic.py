@@ -1,4 +1,4 @@
-from settings import ROW_COUNT, COLUMN_COUNT
+from config import ROW_COUNT, COLUMN_COUNT
 
 
 def create_board():
@@ -12,7 +12,7 @@ def check_if_column_has_space(board, column):
     return board[ROW_COUNT - 1][column] == 0
 
 
-def get_next_open_row(board, column, ROW_COUNT):
+def get_next_open_row(board, column):
     for row in range(ROW_COUNT):
         if board[row][column] == 0:
             return row

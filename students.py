@@ -1,5 +1,6 @@
 import pygame
-from colors import *
+
+from config import DARK_BLUE, YELLOW, BROWN, TAN, AQUA, WHITE, GOLD
 from sounds import viola, rubber_chicken, mud_splat, cow
 
 
@@ -21,10 +22,10 @@ ana_photo = pygame.image.load("Photos/AnaPhoto.bmp")
 gabe_photo = pygame.image.load("Photos/GabePhoto.bmp")
 wjr_photo = pygame.image.load("Photos/WJRPhoto.bmp")
 
-harley = Student("Harley", harley_photo, Color.HARLEYS_COLOR, viola)
-josh = Student("Josh", josh_photo, Color.YELLOW, rubber_chicken)
-tim = Student("Tim", tim_photo, Color.TIMS_COLOR, mud_splat)
-WJR = Student("WJR", wjr_photo, Color.TAN, cow)
-kaydence = Student("Kaydence", kaydence_photo, Color.KAYDENCES_COLOR, cow)
-gabe = Student("Gabe", gabe_photo, Color.GABES_COLOR, mud_splat)
-ana = Student("Ana", ana_photo, Color.TEAL, viola)
+harley = Student("Harley", harley_photo, DARK_BLUE, viola)
+josh = Student("Josh", josh_photo, YELLOW, rubber_chicken)
+tim = Student("Tim", tim_photo, BROWN, mud_splat)
+WJR = Student("WJR", wjr_photo, TAN, cow)
+kaydence = Student("Kaydence", kaydence_photo, AQUA, cow)
+gabe = Student("Gabe", gabe_photo, WHITE, mud_splat)
+ana = Student("Ana", ana_photo, GOLD, viola)

@@ -1,5 +1,6 @@
 import pygame
 
+pygame.init()
 rubber_chicken = pygame.mixer.Sound('Sounds/rubber-chicken.wav')
 cow = pygame.mixer.Sound("Sounds/cow.wav")
 mud_splat = pygame.mixer.Sound("Sounds/mud-splat.wav")
