@@ -18,5 +18,7 @@ students = [ana, gabe, harley, kaydence, josh, tim, WJR]
 students_are_playing = True
 while students_are_playing:
     player1, player2 = choose_players_from(students)
-    play_match(player1, player2)
+    winner = play_match(player1, player2)
+    winner.score += 1
+
 

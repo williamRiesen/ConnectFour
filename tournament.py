@@ -11,7 +11,7 @@ screen = pygame.display.set_mode((width, height))
 
 
 def choose_players_from(students):
-    post_player_roster(students)
+    post_roster(students)
     ask_who_is_player1()
     player1 = get_user_selection(students)
     ask_who_is_player2(player1)
@@ -21,15 +21,18 @@ def choose_players_from(students):
     return player1, player2
 
 
-def post_player_roster(students):
+def post_roster(students):
     screen.fill(BLUE)
     for student in students:
         y_position = students.index(student) * SQUARE_SIZE
         place_message(student.name, (300, y_position + 20), TAN)
-
+        place_circle((500, y_position), student.favorite_color)
+        if student.score > 0:
+            score_color = get_opposite(student.favorite_color)
+            place_message(str(student.score),
+                          (492, y_position + 16), score_color)
         screen.blit(student.photo, (200, y_position))
-        place_circle((500, y_position),
-                     student.favorite_color)
+
     pygame.display.update()
 
 
@@ -124,6 +127,13 @@ def place_circle(position=(100, 100), color=WHITE):
     circle_position = (position[0], position[1] + circle_radius + 5)
     pygame.draw.circle(screen, color, circle_position, circle_radius)
 
-    if color == TEAL:
+    if color == BLUE:
         pygame.draw.circle(screen, BLACK,
                            circle_position, circle_radius, 2)
+
+
+def get_opposite(color):
+    opposite = (255 - color[0],
+                255 - color[1],
+                255 - color[2])
+    return opposite

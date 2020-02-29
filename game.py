@@ -20,6 +20,7 @@ checker_array = create_board()
 def play_match(entry1, entry2):
     global checker_array, player1_banner, player2_banner, \
         current_player_banner, current_player
+    pygame.display.set_caption("Connect Four!")
     register_players(entry1, entry2)
     checker_array = create_board()
     construct_starting_layout()

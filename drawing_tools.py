@@ -48,3 +48,6 @@ def draw_checker(player):
     center = (int(SQUARE_SIZE * 0.5), int(SQUARE_SIZE * 0.5))
     pygame.draw.circle(checker, player.favorite_color, center, radius)
     return checker
+
+
+
