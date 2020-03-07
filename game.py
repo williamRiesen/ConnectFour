@@ -1,12 +1,14 @@
 import math
 import sys
+
 import pygame
+
+from config import ROW_COUNT, SQUARE_SIZE, COLUMN_COUNT, BLACK
 from drawing_tools import create_empty_grid, \
-    PhotoPosition, create_banner, draw_checker
+    PhotoPosition, create_banner, draw_checker, create_checker_layer
 from game_logic import create_board, check_if_column_has_space, check_for_win, \
     get_next_open_row, record_move
-from config import ROW_COUNT, SQUARE_SIZE, COLUMN_COUNT, BLACK
-from sounds import bell, bubble_pop_high, bubble_pop_low
+from sounds import bell, bubble_pop_high, bubble_pop_low, checker_drop_1
 
 height = (ROW_COUNT + 1) * SQUARE_SIZE
 width = COLUMN_COUNT * SQUARE_SIZE
@@ -29,16 +31,21 @@ def play_match(entry1, entry2):
     current_player_banner = player1_banner
 
     while winner is None:
-        events = pygame.event.get()
-        for event in events:
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                selected_column = math.floor(event.pos[0] / SQUARE_SIZE)
-                winner = play_move(selected_column)
-            elif event.type == pygame.MOUSEMOTION:
-                slide_checker_horizontally_to(event.pos[0])
-            elif event.type == pygame.QUIT:
-                sys.exit()
-        pygame.time.wait(20)
+        event = pygame.event.poll()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            selected_column = math.floor(event.pos[0] / SQUARE_SIZE)
+            move_wins = play_move(selected_column)
+            if move_wins:
+                winner = current_player
+                declare_winner(winner)
+            else:
+                switch_players()
+                winner = None
+        elif event.type == pygame.MOUSEMOTION:
+            slide_checker_horizontally_to(event.pos[0])
+        elif event.type == pygame.QUIT:
+            sys.exit()
+        pygame.time.wait(5)
 
     wait_for_any_key(winner)
     return winner
@@ -52,6 +59,7 @@ def register_players(entry1, entry2):
 
 def construct_starting_layout():
     global player1_banner, player2_banner
+    screen.fill(BLACK)
     player1_banner = create_banner(player1, PhotoPosition.LEFT, player1.name
                                    + " is up.")
     player2_banner = create_banner(player2, PhotoPosition.RIGHT, player2.name
@@ -71,27 +79,21 @@ def slide_checker_horizontally_to(x_position):
 
 
 def play_move(selected_column):
-    global current_player
     move_is_legal = check_if_column_has_space(checker_array, selected_column)
     if move_is_legal:
         drop_checker(selected_column)
         move_wins = check_for_win(checker_array, current_player)
-        if move_wins:
-            winner = current_player
-            declare_winner(winner)
-        else:
-            switch_players()
-            winner = None
     else:
-        winner = None
-    return winner
+        move_wins = None
+    return move_wins
 
 
 def drop_checker(selected_column):
-    if current_player == player1:
-        bubble_pop_high.play()
-    else:
-        bubble_pop_low.play()
+    checker_drop_1.play()
+    # if current_player == player1:
+    #     bubble_pop_high.play()
+    # else:
+    #     bubble_pop_low.play()
     selected_row = get_next_open_row(checker_array, selected_column)
     record_move(checker_array, selected_row, selected_column, current_player)
     screen.blit(current_player_banner, (0, 0))
@@ -158,3 +160,11 @@ def wait_for_any_key(winner):
             if event.type == pygame.KEYDOWN:
                 awaiting_any_key = False
         pygame.time.wait(20)
+
+    checker_layer = create_checker_layer(checker_array, player1, player2)
+    empty_grid = create_empty_grid()
+    for i in range(500):
+        checker_layer.scroll(0, 1)
+        screen.blit(checker_layer, (0, 0))
+        screen.blit(empty_grid, (0, 0))
+        pygame.display.update()

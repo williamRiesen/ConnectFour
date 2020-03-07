@@ -22,6 +22,7 @@ def create_banner(player, photo_position, message):
 def create_empty_grid():
     empty_grid = Surface(
         (COLUMN_COUNT * SQUARE_SIZE, (ROW_COUNT + 1) * SQUARE_SIZE))
+    empty_grid.set_colorkey((0, 0, 0))
     for row in range(ROW_COUNT):
         for column in range(COLUMN_COUNT):
             draw_block(empty_grid, column, row)
@@ -44,10 +45,21 @@ def draw_block(screen, column, row):
 def draw_checker(player):
     checker = pygame.Surface((SQUARE_SIZE, SQUARE_SIZE))
     checker.set_colorkey(BLACK)
-    radius = int(SQUARE_SIZE * 0.45)
+    radius = int(SQUARE_SIZE * 0.5)
     center = (int(SQUARE_SIZE * 0.5), int(SQUARE_SIZE * 0.5))
     pygame.draw.circle(checker, player.favorite_color, center, radius)
     return checker
 
 
-
+def create_checker_layer(checker_array, player1, player2):
+    checker_layer = Surface(
+        (COLUMN_COUNT * SQUARE_SIZE, (ROW_COUNT + 1) * SQUARE_SIZE))
+    for column in range(COLUMN_COUNT):
+        for row in range(ROW_COUNT):
+            whose_checker = checker_array[row][column]
+            if whose_checker != 0:
+                destination = (column * SQUARE_SIZE, (ROW_COUNT - row) *
+                               SQUARE_SIZE)
+                checker = draw_checker(whose_checker)
+                checker_layer.blit(checker, destination)
+    return checker_layer
